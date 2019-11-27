@@ -22,43 +22,52 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		
 		initializeFaces("facedatavalidation");
-		runPerceptron();
 		//printFaces();
+		runPerceptron(); 
 		
-		
-		int correct = 0;
-		
-		for(int index = 0; index < images.size(); index++) {
 			
-			int sum = 0;
-			int answer;
+			//printFaces();
 			
 			
+			int correct = 0;
 			
-			for(int i = 0; i < weights.size() - 1; i++) {
-				sum += (weights.get(i) * feature.get(index).get(i));
-			}
+			for(int index = 0; index < images.size(); index++) {
 				
-			sum += weights.get(weights.size() - 1);
-			
-			if(sum >= 0){
-				answer = 1;
-			}else{
-				answer = 0;
+				int sum = 0;
+				int answer;
+				
+				
+				
+				for(int i = 0; i < weights.size() - 1; i++) {
+					sum += (weights.get(i) * feature.get(index).get(i));
+				}
+					
+				sum += weights.get(weights.size() - 1);
+				
+				if(sum >= 0){
+					answer = 1;
+				}else{
+					answer = 0;
+				}
+				
+				if(answer == getCorrect(index, "facedatavalidationlabels")) {
+					correct++;
+				}
+				
 			}
 			
-			if(answer == getCorrect(index, "facedatavalidationlabels")) {
-				correct++;
-			}
+			double answer = (double)correct / images.size();
+			answer = answer * 100;
 			
-		}
-		
-		double answer = (double)correct / images.size();
-		answer = answer * 100;
-		
-		System.out.println(answer + "%" );
-		System.out.println(correct);
-		
+			System.out.println(answer + "%" );
+			System.out.println(correct);
+			
+			
+			
+			
+			
+			
+			
 		
 	}
 
@@ -72,10 +81,12 @@ public static void runPerceptron() throws FileNotFoundException {
 	initializeWeights();
 	
 	while(true) {
-		
+			oldWeights.clear();
 		for(int i = 0; i < weights.size(); i++) {
+			
 			oldWeights.add(weights.get(i));
 		}
+		System.out.println("Here");
 		
 		for(int index = 0; index < images.size(); index++) {
 			
@@ -117,13 +128,26 @@ public static void runPerceptron() throws FileNotFoundException {
 			
 			
 		}
-		
+		//System.out.println("Running");
+				System.out.print("Old ");
+				for(int i = 0; i < oldWeights.size(); i++) {
+					System.out.print(oldWeights.get(i) + " ");
+				
+				}
+				System.out.println();
+				System.out.print("New ");
+				for(int i = 0; i < weights.size(); i++) {
+					System.out.print(weights.get(i) + " ");
+				
+				}
+				System.out.println();
 		
 		if(terminate() == 1) {
 			break;
 		}
 		
-		System.out.println("hello");
+		
+
 		
 		
 	}
@@ -184,7 +208,7 @@ public static int terminate() {
 		sumOld += oldWeights.get(i);
 	}
 	
-	if(Math.abs(sumNew - sumOld) < 100) {
+	if(Math.abs(sumNew - sumOld) < 10) {
 		return 1;
 	}
 	
