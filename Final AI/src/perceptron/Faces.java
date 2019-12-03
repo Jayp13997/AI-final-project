@@ -105,7 +105,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		double answer = (double)correct / images2.size();
 		answer = answer * 100;
 		
-		if(x == 10)
+		//if(x == 10)
 		System.out.println(answer + "%" );
 		//System.out.println(correct);
 		

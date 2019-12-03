@@ -13,7 +13,7 @@ public class Digits{
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
 	static int rows = 28; 
 	static int columns = 28;
-	static int splitRows = 14;
+	static int splitRows = 28;
 	static int splitColumns = 14;
 	static ArrayList<ArrayList<Integer>> weights = new ArrayList<ArrayList<Integer>> ();
 	static ArrayList<ArrayList<Integer>> feature =  new ArrayList<ArrayList<Integer>>();//number of pixels
@@ -84,8 +84,9 @@ public static void main(String[] args) throws FileNotFoundException{
 			
 			int sum = 0;
 			int answer;
-			
+			fy2.clear();
 		for(int i = 0; i < weights.size(); i++) {
+			
 			for(int j = 0; j < weights.get(i).size() - 1; j++){
 				sum += (weights.get(i).get(j) * feature2.get(index).get(j));
 			}
@@ -98,6 +99,9 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		 sum = getMax(fy2);
 		 answer = fy2.indexOf(sum);
+		// System.out.println("sup");
+		// System.out.println("answer " + answer);
+		 //System.out.println();
 			
 			
 			if(answer == getCorrect(index, "testlabels")) {
@@ -143,6 +147,7 @@ public static void runPerceptron() throws FileNotFoundException {
 	initializeWeights();
 	
 	while(true) {
+			
 			oldWeights.clear();
 		for(int i = 0; i < weights.size(); i++) {
 			
@@ -153,6 +158,7 @@ public static void runPerceptron() throws FileNotFoundException {
 		
 		for(int a = 0; a < tempImages.size(); a++) {
 			//System.out.println(tempImages.size());
+			fy.clear();
 			int index = indices.get(a);
 			int sum = 0;
 			int answer;
@@ -169,12 +175,16 @@ public static void runPerceptron() throws FileNotFoundException {
 			
 			 sum = getMax(fy);
 			 answer = fy.indexOf(sum);
+			 
+			 if(answer == 0) {
+				 System.out.println("sup");
+			 }
 			
 			int correct = getCorrect(index, "traininglabels");
 			
 			if(answer != correct) {
 				
-					
+				//System.out.println("answer " + answer);	
 		for(int i = 0; i < weights.get(answer).size() - 1; i++) {
 		weights.get(answer).set(i, weights.get(answer).get(i) - feature.get(index).get(i));
 					}
@@ -267,7 +277,7 @@ public static int terminate() {
 	
 	for(int i = 0; i < weights.size(); i++) {
 		for(int j = 0; j < weights.get(i).size() - 1; j++){
-		sumNew += weights.get(j).get(j);
+		sumNew += weights.get(i).get(j);
 		}
 	}
 	
@@ -312,16 +322,20 @@ public static int getCorrect(int index, String name) throws FileNotFoundExceptio
 public static int getMax(ArrayList<Integer> f) {
 	
 	int max = f.get(0);
+	int index = 0;
 	
-	for(int i = 0; i < f.size(); i++) {
+	for(int i = 1; i < f.size(); i++) {
 		
 		if(max < f.get(i)) {
 			max = f.get(i);
+			index = i;
 		}
 		
 		
 	}
 	
+	
+	//System.out.println("here  " +  index);
 	return max;
 	
 	
@@ -347,7 +361,7 @@ public static void initializeWeights() {// setting weights randomly from - to + 
 	//divided into
 
 Random ran = new Random();
-int r = ran.nextInt(10);
+int r = ran.nextInt(20);
 
 ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -356,12 +370,17 @@ for(int i = 0; i < 10; i++){
 	for(int j = 0; j < splitRows * splitColumns; j++) {
 		//weights.get(i).add(r);
 		temp.add(r);
-		r = ran.nextInt(10);
+		r = ran.nextInt(20);
 }
 
 //weights.get(i).add(r);//adds bias
 	temp.add(r);
+	//System.out.println(temp.size());
 	weights.add(temp);
+	//System.out.println("we size " + weights.get(i).size());
+	temp = new ArrayList<Integer>();
+	//System.out.println("   2we size " + weights.get(i).size());
+	
 }
 
 
