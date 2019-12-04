@@ -252,6 +252,7 @@ public static void initializeFaces(String name, ArrayList<Integer[][]> image) th
 			
 			
 		}
+
 		
 		temp1[counter] = temp2;
 		counter++;
