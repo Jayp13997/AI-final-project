@@ -249,6 +249,7 @@ public static void initializeFaces(String name, ArrayList<Integer[][]> image) th
 			}else{
 				temp2[i] = 1;
 			}
+			
 		}
 		
 		temp1[counter] = temp2;
