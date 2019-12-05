@@ -175,11 +175,11 @@ public static void runPerceptron() throws FileNotFoundException {
 			
 			 sum = getMax(fy);
 			 answer = fy.indexOf(sum);
-			 
+/*			 
 			 if(answer == 0) {
 				 System.out.println("sup");
 			 }
-			
+*/			
 			int correct = getCorrect(index, "traininglabels");
 			
 			if(answer != correct) {
@@ -364,7 +364,7 @@ public static void initializeWeights() {// setting weights randomly from - to + 
 	//divided into
 
 Random ran = new Random();
-int r = ran.nextInt(20);
+int r = ran.nextInt(2);
 
 ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -373,7 +373,7 @@ for(int i = 0; i < 10; i++){
 	for(int j = 0; j < splitRows * splitColumns; j++) {
 		//weights.get(i).add(r);
 		temp.add(r);
-		r = ran.nextInt(20);
+		r = ran.nextInt(2);
 }
 
 //weights.get(i).add(r);//adds bias
