@@ -60,7 +60,6 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		while(x <= 10) {
 			
-			long starttime = System.nanoTime();
 			
 			indices.clear();
 			tempImages.clear(); 
@@ -85,6 +84,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		Random ran = new Random();
 		int r = ran.nextInt(100);
 		
+		long starttime = System.nanoTime();
 		for(int index = 0; index < images2.size(); index++) {
 			
 			int sum = 0;
@@ -130,16 +130,21 @@ public static void main(String[] args) throws FileNotFoundException{
 		answer = answer * 100;
 		
 		//if(x == 10)
+		
+		
+		long endtime = System.nanoTime();
+		
+		System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
+		
 		System.out.println(answer + "%" );
+		System.out.println();
 		//System.out.println(correct);
 		
 			
+	
 			
 			x++;
 			
-			
-			long endtime = System.nanoTime();
-			System.out.println("Time:" + ((double)(endtime - starttime)/1000000000) + "s");
 			
 			
 			
@@ -163,6 +168,8 @@ public static void main(String[] args) throws FileNotFoundException{
 
 
 public static void runPerceptron() throws FileNotFoundException {
+	
+	long starttime = System.nanoTime();
 	
 	initializeWeights();
 	
@@ -238,6 +245,11 @@ public static void runPerceptron() throws FileNotFoundException {
 				System.out.println();*/
 		//System.out.println("here");
 		if(terminate() == 1) {
+
+			long endtime = System.nanoTime();
+			
+			System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
+			
 			break;
 		}
 		
