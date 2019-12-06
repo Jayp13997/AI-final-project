@@ -60,6 +60,8 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		while(x <= 10) {
 			
+			long starttime = System.nanoTime();
+			
 			indices.clear();
 			tempImages.clear(); 
 			weights.clear();
@@ -79,6 +81,9 @@ public static void main(String[] args) throws FileNotFoundException{
 		runPerceptron(); 
 		
 		int correct = 0;
+		
+		Random ran = new Random();
+		int r = ran.nextInt(100);
 		
 		for(int index = 0; index < images2.size(); index++) {
 			
@@ -102,6 +107,17 @@ public static void main(String[] args) throws FileNotFoundException{
 		// System.out.println("sup");
 		// System.out.println("answer " + answer);
 		 //System.out.println();
+		 
+		 if(index >= r && index < r+20 && x == 10) {
+				printSingleDigit(images2.get(index));
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println(answer);
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
 			
 			
 			if(answer == getCorrect(index, "testlabels")) {
@@ -120,6 +136,10 @@ public static void main(String[] args) throws FileNotFoundException{
 			
 			
 			x++;
+			
+			
+			long endtime = System.nanoTime();
+			System.out.println("Time:" + ((double)(endtime - starttime)/1000000000) + "s");
 			
 			
 			
@@ -426,6 +446,23 @@ public static void printDigits(ArrayList<Integer[][]> image) {//Prints all faces
 			System.out.println();
 		}
 }
+}
+
+public static void printSingleDigit(Integer[][] image) {
+	
+	for(int i = 0; i < rows; i++) {
+		for(int j = 0; j < columns; j++) {
+			if(image[i][j] == 0){
+				System.out.print(' ');
+			}
+			else {
+				System.out.print('+');
+			}
+//			System.out.print(image[i][j]);
+		}
+		System.out.println();
+	}
+	
 }
 
 public static void printFeatures(int index) {
