@@ -15,11 +15,11 @@ public class Digits{
 	static int columns = 28;
 	static int splitRows = 28;
 	static int splitColumns = 14;
-	static ArrayList<ArrayList<Integer>> weights = new ArrayList<ArrayList<Integer>> ();
+	static ArrayList<ArrayList<Double>> weights = new ArrayList<ArrayList<Double>> ();
 	static ArrayList<ArrayList<Integer>> feature =  new ArrayList<ArrayList<Integer>>();//number of pixels
-	static ArrayList<ArrayList<Integer>> oldWeights = new ArrayList<ArrayList<Integer>>();
-	static ArrayList<Integer> fy = new ArrayList<Integer>();
-	static ArrayList<Integer> fy2 = new ArrayList<Integer>();
+	static ArrayList<ArrayList<Double>> oldWeights = new ArrayList<ArrayList<Double>>();
+	static ArrayList<Double> fy = new ArrayList<Double>();
+	static ArrayList<Double> fy2 = new ArrayList<Double>();
 	
 	
 	static ArrayList<Integer[][]> images2 = new ArrayList<Integer[][]>();
@@ -29,6 +29,8 @@ public class Digits{
 public static void main(String[] args) throws FileNotFoundException{
 		
 		
+	ArrayList<Integer> no = new ArrayList<Integer>();
+	
 	
 		/*for(int ww = 0; ww < 100; ww++) {
 			
@@ -43,6 +45,7 @@ public static void main(String[] args) throws FileNotFoundException{
 			
 		initializeFaces("trainingimages", images);
 		initializeFaces("testimages", images2);
+		//printDigits(images);
 		
 		for(int i = 0; i < images.size(); i++) {
 			numberOfPixels(i, feature, images);
@@ -53,7 +56,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		}
 		//System.out.println(images2.size());
 		
-		
+		System.out.println(images.size());
 		
 		int x = 1;
 	
@@ -65,8 +68,10 @@ public static void main(String[] args) throws FileNotFoundException{
 			weights.clear();
 			//System.out.println(images.size());
 			//System.out.println("here " + (int)( (double) images.size() *  ((double)x/10)));
-			
+			System.out.println((double)x * 10  + "%");
+			System.out.println("image size: " + images.size() *  ((double)x/10));
 		for(int i = 0; i < (int)((double) images.size() *  ((double)x/10)); i++){//same image again or not?
+			
 			Random r = new Random();
 			int index = (int) r.nextInt(images.size());
 			while(indices.contains(index) == true) {
@@ -82,7 +87,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		for(int index = 0; index < images2.size(); index++) {
 			
-			int sum = 0;
+			double sum = 0;
 			int answer;
 			fy2.clear();
 		for(int i = 0; i < weights.size(); i++) {
@@ -115,7 +120,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		//if(x == 10)
 		System.out.println(answer + "%" );
-		//System.out.println(correct);
+		System.out.println();
 		
 			
 			
@@ -149,18 +154,20 @@ public static void runPerceptron() throws FileNotFoundException {
 	while(true) {
 			
 			oldWeights.clear();
-		for(int i = 0; i < weights.size(); i++) {
+	for(int i = 0; i < weights.size(); i++) {
 			
 			oldWeights.add(weights.get(i));
 	
 		}
+		
+	
 		//System.out.println("Here");
 		
 		for(int a = 0; a < tempImages.size(); a++) {
 			//System.out.println(tempImages.size());
 			fy.clear();
 			int index = indices.get(a);
-			int sum = 0;
+			double sum = 0;
 			int answer;
 		
 			for(int i = 0; i < weights.size(); i++) {
@@ -176,9 +183,7 @@ public static void runPerceptron() throws FileNotFoundException {
 			 sum = getMax(fy);
 			 answer = fy.indexOf(sum);
 			 
-			 if(answer == 0) {
-				 System.out.println("sup");
-			 }
+			
 			
 			int correct = getCorrect(index, "traininglabels");
 			
@@ -290,7 +295,7 @@ public static int terminate() {
 		}
 	}
 	
-	if(Math.abs(sumNew - sumOld) < 1) {
+	if(Math.abs(sumNew - sumOld) == 0) {
 		return 1;
 	}
 	
@@ -322,7 +327,29 @@ public static int getCorrect(int index, String name) throws FileNotFoundExceptio
 	
 }
 
-public static int getMax(ArrayList<Integer> f) {
+public static double getMax(ArrayList<Double> fy3) {
+	
+	Double max = fy3.get(0);
+	int index = 0;
+	
+	for(int i = 1; i < fy3.size(); i++) {
+		
+		if(max < fy3.get(i)) {
+			max = fy3.get(i);
+			index = i;
+		}
+		
+		
+	}
+	
+	
+	//System.out.println("here  " +  index);
+	return max;
+	
+	
+}
+
+public static int getIndex(ArrayList<Integer> f) {
 	
 	int max = f.get(0);
 	int index = 0;
@@ -339,7 +366,7 @@ public static int getMax(ArrayList<Integer> f) {
 	
 	
 	//System.out.println("here  " +  index);
-	return max;
+	return index;
 	
 	
 }
@@ -364,24 +391,26 @@ public static void initializeWeights() {// setting weights randomly from - to + 
 	//divided into
 
 Random ran = new Random();
-int r = ran.nextInt(20);
+double r = 0;
 
-ArrayList<Integer> temp = new ArrayList<Integer>();
+ArrayList<Double> temp = new ArrayList<Double>();
 
 for(int i = 0; i < 10; i++){
 	
 	for(int j = 0; j < splitRows * splitColumns; j++) {
 		//weights.get(i).add(r);
+		r = ran.nextInt(2) - 1;
 		temp.add(r);
-		r = ran.nextInt(20);
+		
 }
 
 //weights.get(i).add(r);//adds bias
+	r = ran.nextInt(2) - 1;
 	temp.add(r);
 	//System.out.println(temp.size());
 	weights.add(temp);
 	//System.out.println("we size " + weights.get(i).size());
-	temp = new ArrayList<Integer>();
+	temp = new ArrayList<Double>();
 	//System.out.println("   2we size " + weights.get(i).size());
 	
 }

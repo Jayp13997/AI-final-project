@@ -27,8 +27,8 @@ public class Faces {
 public static void main(String[] args) throws FileNotFoundException{
 		
 		
-	
-		for(int ww = 0; ww < 100; ww++) {
+	System.out.println(getCorrect(442,"facedatatrainlabels"));
+		for(int ww = 0; ww < 49; ww++) {
 			
 			images.clear();
 			images2.clear();
@@ -52,7 +52,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		//System.out.println(images2.size());
 		
 		
-		
+		;
 		int x = 1;
 	
 		
@@ -281,7 +281,7 @@ public static int getCorrect(int index, String name) throws FileNotFoundExceptio
 	Scanner line = new Scanner(file);
 	int counter = 0;
 	
-	while(line.hasNextLine()) {
+	while(line.hasNext()) {
 		int correct = line.nextInt();
 		
 		if(counter == index) {
