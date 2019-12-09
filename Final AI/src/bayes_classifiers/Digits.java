@@ -48,20 +48,7 @@ public class Digits{
 		
 		
 		
-		for(int number = 0; number < 10; number++) {
-			probY.add(0.0);
-			for(int i = 0; i < trainLabels.size(); i++) {
-				if(trainLabels.get(i) == number){
-					probY.set(number, probY.get(number) + 1);
-					}
-			}
-		}
 		
-		
-		for(int number = 0; number < 10; number++) {
-			probY.set(number, probY.get(number)/trainLabels.size());
-			
-		}
 		
 		
 		
@@ -71,6 +58,7 @@ public class Digits{
 			
 			indices.clear();
 			tempImages.clear();
+			probY.clear();
 			// totalCount = new ArrayList<Double[][]>();
 			 
 			
@@ -93,6 +81,22 @@ public class Digits{
 				
 			}	
 	
+	for(int number = 0; number < 10; number++) {
+		probY.add(0.0);
+		for(int i = 0; i < tempImages.size(); i++) {
+			int v = indices.get(i);
+			if(trainLabels.get(v) == number){
+				probY.set(number, probY.get(number) + 1);
+				}
+		}
+	}
+	
+	
+	for(int number = 0; number < 10; number++) {
+		probY.set(number, probY.get(number)/tempImages.size());
+		
+		
+	}
 	for(int number = 0; number < 10; number++) {
 		buildTable(number);
 	}

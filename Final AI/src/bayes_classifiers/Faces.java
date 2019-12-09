@@ -45,18 +45,7 @@ public class Faces {
 			numberOfPixels(i, feature2, images2);
 		}
 		
-		double pyFace;
-		double pyNotFace;
 		
-		double counter = 0;
-		
-		for(int i = 0; i < trainLabels.size(); i++) {
-			if(trainLabels.get(i) == 1){
-			counter++;
-			}
-	}
-		pyFace = counter/ trainLabels.size();
-		pyNotFace = 1 - pyFace;
 				int x = 1;
 		while(x <= 10) {
 			
@@ -76,6 +65,20 @@ public class Faces {
 				
 				
 			}	
+	
+	double pyFace;
+	double pyNotFace;
+	
+	double counter = 0;
+	
+	for(int i = 0; i < indices.size(); i++) {
+		int v = indices.get(i);
+		if(trainLabels.get(v) == 1){
+		counter++;
+		}
+}
+	pyFace = counter/ tempImages.size();
+	pyNotFace = 1 - pyFace;
 	
 	
 		buildTable(0);
