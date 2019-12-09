@@ -27,8 +27,13 @@ public class Faces {
 public static void main(String[] args) throws FileNotFoundException{
 		
 		
+
 	System.out.println(getCorrect(442,"facedatatrainlabels"));
 		for(int ww = 0; ww < 49; ww++) {
+
+	
+//		for(int ww = 0; ww < 100; ww++) {
+
 			
 			images.clear();
 			images2.clear();
@@ -58,6 +63,8 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		while(x <= 10) {
 			
+			
+			
 			indices.clear();
 			tempImages.clear(); 
 			weights.clear();
@@ -78,6 +85,10 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		int correct = 0;
 		
+		Random ran = new Random();
+		int r = ran.nextInt(100);
+		
+		long starttime = System.nanoTime();
 		for(int index = 0; index < images2.size(); index++) {
 			
 			int sum = 0;
@@ -96,6 +107,24 @@ public static void main(String[] args) throws FileNotFoundException{
 				answer = 0;
 			}
 			
+			
+			
+			if(index >= r && index < r+20 && x == 10) {
+				printSingleFace(images2.get(index));
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				if(answer == 1) {
+					System.out.println("FACE");
+				}
+				else {
+					System.out.println("NOT FACE");
+				}
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+			
 			if(answer == getCorrect(index, "facedatatestlabels")) {
 				correct++;
 			}
@@ -106,7 +135,14 @@ public static void main(String[] args) throws FileNotFoundException{
 		answer = answer * 100;
 		
 		//if(x == 10)
+		
+		
+		long endtime = System.nanoTime();
+		
+		System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
+		
 		System.out.println(answer + "%" );
+		System.out.println();
 		//System.out.println(correct);
 		
 			
@@ -114,7 +150,8 @@ public static void main(String[] args) throws FileNotFoundException{
 			x++;
 			
 			
-			
+		
+		}
 		}
 		
 		
@@ -126,7 +163,7 @@ public static void main(String[] args) throws FileNotFoundException{
 			//System.out.println();
 			
 			
-		}
+//		}
 			
 			
 			
@@ -135,6 +172,8 @@ public static void main(String[] args) throws FileNotFoundException{
 
 
 public static void runPerceptron() throws FileNotFoundException {
+	
+	long starttime = System.nanoTime();
 	
 	initializeWeights();
 	
@@ -202,6 +241,11 @@ public static void runPerceptron() throws FileNotFoundException {
 				System.out.println();*/
 		//System.out.println("here");
 		if(terminate() == 1) {
+			
+			long endtime = System.nanoTime();
+			
+			System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
+			
 			break;
 		}
 		
@@ -370,6 +414,24 @@ public static void printFaces(ArrayList<Integer[][]> image) {//Prints all faces
 		}
 }
 }
+
+public static void printSingleFace(Integer[][] image) {
+	
+	for(int i = 0; i < rows; i++) {
+		for(int j = 0; j < columns; j++) {
+			if(image[i][j] == 0){
+				System.out.print(' ');
+			}
+			else {
+				System.out.print('+');
+			}
+//			System.out.print(image[i][j]);
+		}
+		System.out.println();
+	}
+	
+}
+
 
 public static void printFeatures(int index) {
 	//numberOfPixels(index);
