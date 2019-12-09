@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Faces {
 	static ArrayList<Integer[][]> images = new ArrayList<Integer[][]>();
 
-	
+	 
 	
 	static int rows = 70;
 	static int columns = 60;
