@@ -1,4 +1,4 @@
-package bayes_classifiers;
+package own;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Faces {
+public class FaceB {
 	static ArrayList<Integer[][]> images = new ArrayList<Integer[][]>();
 
 	 
@@ -29,7 +29,15 @@ public class Faces {
 	static Double[][] totalCount2 = new Double[totalFeatures][maxNumber];
 	static ArrayList<Integer[][]> tempImages = new ArrayList<Integer[][]>();
 	
-	public static void main(String[] args) throws FileNotFoundException {
+	public Double[][] build(int index){
+		if(index == 1) {
+		return totalCount;
+		}else {
+			return totalCount2;
+		}
+	}
+	
+	public void baysF() throws FileNotFoundException {
 
 		initializeFaces("facedatatrain", images);
 		initializeFaces("facedatatest", images2);

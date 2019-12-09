@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Faces {
+public class Digits{
 	static ArrayList<Integer[][]> images = new ArrayList<Integer[][]>();
 
 	 
 	
-	static int rows = 70;
-	static int columns = 60;
+	static int rows = 28;
+	static int columns = 28;
 	static int splitRows = 7;
-	static int splitColumns = 60;
+	static int splitColumns = 28;
 	static ArrayList<ArrayList<Integer>> feature = new ArrayList<ArrayList<Integer>>();// number of pixels
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
 	static ArrayList<Integer> trainLabels = new ArrayList<Integer>();
@@ -25,16 +25,17 @@ public class Faces {
 	static int r = rows / splitRows;
 	static int c = columns / splitColumns;
 	static int maxNumber = (r * c) + 1;
-	static Double[][] totalCount = new Double[totalFeatures][maxNumber];
-	static Double[][] totalCount2 = new Double[totalFeatures][maxNumber];
+	static ArrayList<Double[][]> totalCount = new ArrayList<Double[][]>();
 	static ArrayList<Integer[][]> tempImages = new ArrayList<Integer[][]>();
+	static ArrayList<Double> correctNum = new ArrayList<Double>();
+	static ArrayList<Double> probY = new ArrayList<Double>();
 	
 	public static void main(String[] args) throws FileNotFoundException {
 
-		initializeFaces("facedatatrain", images);
-		initializeFaces("facedatatest", images2);
-		storeLabels("facedatatrainlabels", "train");
-		storeLabels("facedatatestlabels", "test");
+		initializeFaces("trainingimages", images);
+		initializeFaces("testimages", images2);
+		storeLabels("traininglabels", "train");
+		storeLabels("testlabels", "test");
 
 		for (int i = 0; i < images.size(); i++) {
 			numberOfPixels(i, feature, images);
@@ -45,25 +46,40 @@ public class Faces {
 			numberOfPixels(i, feature2, images2);
 		}
 		
-		double pyFace;
-		double pyNotFace;
 		
-		double counter = 0;
 		
-		for(int i = 0; i < trainLabels.size(); i++) {
-			if(trainLabels.get(i) == 1){
-			counter++;
+		for(int number = 0; number < 10; number++) {
+			probY.add(0.0);
+			for(int i = 0; i < trainLabels.size(); i++) {
+				if(trainLabels.get(i) == number){
+					probY.set(number, probY.get(number) + 1);
+					}
 			}
-	}
-		pyFace = counter/ trainLabels.size();
-		pyNotFace = 1 - pyFace;
-				int x = 1;
+		}
+		
+		
+		for(int number = 0; number < 10; number++) {
+			probY.set(number, probY.get(number)/trainLabels.size());
+			
+		}
+		
+		
+		
+		int x = 1;
 		while(x <= 10) {
+			
 			
 			indices.clear();
 			tempImages.clear();
-			 totalCount = new Double[totalFeatures][maxNumber];
-			 totalCount2 = new Double[totalFeatures][maxNumber];
+			// totalCount = new ArrayList<Double[][]>();
+			 
+			
+			 
+			for(int number = 0; number < 10; number++) {
+
+			 totalCount.add(new Double[totalFeatures][totalFeatures]);
+			 
+			}
 	for(int i = 0; i < (int)((double) images.size() *  ((double)x/10)); i++){//same image again or not?
 				Random r = new Random();
 				int index = (int) r.nextInt(images.size());
@@ -77,45 +93,48 @@ public class Faces {
 				
 			}	
 	
-	
-		buildTable(0);
-		buildTable(1);
-	
+	for(int number = 0; number < 10; number++) {
+		buildTable(number);
+	}
 		
 		int correct = 0;
 		for(int i = 0; i < feature2.size(); i++) {
 			
 			double multiF = 1;
-			double multiNF = 1;
+			
 			int answer = -1;
-			for(int j = 0; j < feature2.get(i).size();j++) {
+		for(int number = 0; number < 10; number++){
+			for(int j = 0; j < feature2.get(i).size();j++){
 				//System.out.println(feature2.get(i).get(j));
-				double answer1 = totalCount[j][feature2.get(i).get(j)];
 				
-				multiF *= answer1;
-				//System.out.println("here" + multiF);
 				
-				double answer2 = totalCount2[j][feature2.get(i).get(j)];
+					double answer1 = totalCount.get(number)[j][feature2.get(i).get(j)];
+					
+					multiF *= answer1;
+					
+					
+				}
 				
-				multiNF *= answer2;
+			multiF *= probY.get(number);
+			correctNum.add(multiF);
+			multiF = 1;
+				
 			
 				
 			}
 			
+			//System.out.println(correctNum.get(5));
 			
-			multiF *= pyFace;
-			multiNF *= pyNotFace;
+			//multiF *= pyFace;
+			//multiNF *= pyNotFace;
 			
-			if(multiF > multiNF) {
-				answer = 1;
-			}else {
-				answer = 0;
-			}
-			
+			answer = getIndex(correctNum); //return index of max digit prob 
+			//System.out.println(answer);
 			if(answer == testLabels.get(i)) {
 				correct++;
 			}
 			
+			correctNum.clear();
 			
 			
 		}
@@ -138,24 +157,26 @@ public class Faces {
 
 	public static void buildTable(int correct) {
 
-		if (correct == 1) {
+		Double temp[][] = new Double[totalFeatures][maxNumber];
 
 			Double sum[] = new Double[totalFeatures];
-
+		
 			for (int i = 0; i < totalFeatures; i++) {
 				for (int j = 0; j < maxNumber; j++) {
-					totalCount[i][j] = 0.0;
+					
+					temp[i][j] = 0.0;
+					
 				}
 			}
 
 			for (int index = 0; index < tempImages.size(); index++) {
 				
 				int i = indices.get(index);
-				
-				if (trainLabels.get(i) == 1) {
+				//System.out.println(i);
+				if (trainLabels.get(i) == correct){
 					for (int j = 0; j < feature.get(i).size(); j++) {
 
-						totalCount[j][feature.get(i).get(j)]++;
+						temp[j][feature.get(i).get(j)]++;
 
 					}
 				}
@@ -167,25 +188,27 @@ public class Faces {
 			}
 			for (int i = 0; i < totalFeatures; i++) {
 				for (int j = 0; j < maxNumber; j++) {
-					sum[i] += totalCount[i][j];
+					sum[i] += temp[i][j];
 				}
 			}
 
 			for (int i = 0; i < totalFeatures; i++) {
 				for (int j = 0; j < maxNumber; j++) {
-					double d =  totalCount[i][j] /  sum[i];
+					double d =  temp[i][j] /  sum[i];
 
 					 if(d == 0){
-					 totalCount[i][j] = 0.000000000000000001;
+						 temp[i][j] = 0.000000000000000001;
 					 }else {
-					totalCount[i][j] = d;
+						 temp[i][j] = d;
 					 }
 				}
 			}
+			
+			totalCount.set(correct,temp);
 
 			for (int i = 0; i < totalFeatures; i++) {
 				for (int j = 0; j < maxNumber; j++) {
-				//	System.out.print(totalCount[i][j] + " ");
+					//System.out.print(temp[i][j] + " ");
 				}
 				//System.out.println();
 			}
@@ -193,75 +216,37 @@ public class Faces {
 			double check = 0;
 			for (int i = 0; i < totalFeatures; i++) {
 				for (int j = 0; j < maxNumber; j++) {
-					check += totalCount[i][j];
+					check += temp[i][j];
 				}
-			//	System.out.println("check " + check);
+				//System.out.println(" check " + check);
 				check = 0;
 			}
-
-		} else { ///////NOT FACE
-
-			Double sum[] = new Double[totalFeatures];
-
-			for (int i = 0; i < totalFeatures; i++) {
-				for (int j = 0; j < maxNumber; j++) {
-					totalCount2[i][j] = 0.0;
-				}
-			}
-
-			for (int index = 0; index < tempImages.size(); index++) {
-				
-				int i = indices.get(index);
-				if (trainLabels.get(i) == 0) {
-					for (int j = 0; j < feature.get(i).size(); j++) {
-						//System.out.println(feature.get(i).get(j));
-						totalCount2[j][feature.get(i).get(j)]++;
-
-					}
-				}
-
-			}
-
-			for (int i = 0; i < totalFeatures; i++) {
-				sum[i] = 0.0;
-			}
-			for (int i = 0; i < totalFeatures; i++) {
-				for (int j = 0; j < maxNumber; j++) {
-					sum[i] += totalCount2[i][j];
-				}
-			}
-
-			for (int i = 0; i < totalFeatures; i++) {
-				for (int j = 0; j < maxNumber; j++) {
-					double d =  totalCount2[i][j] / sum[i];
-
-					 if(d == 0){
-					totalCount2[i][j] = 0.000000000000000001;
-					 }else {
-					totalCount2[i][j] = d;
-					 }
-				}
-			}
-
-			for (int i = 0; i < totalFeatures; i++) {
-				for (int j = 0; j < maxNumber; j++) {
-					//System.out.print(totalCount2[i][j] + " ");
-				}
-			//	System.out.println();
-			}
-
-			double check = 0;
-			for (int i = 0; i < totalFeatures; i++) {
-				for (int j = 0; j < maxNumber; j++) {
-					check += totalCount2[i][j];
-				}
-				//System.out.println("check " + check);
-				check = 0;
-			}
-
+			
 		}
 
+	
+
+	public static int getIndex(ArrayList<Double> f) {
+		
+		double max = f.get(0);
+		int index = 0;
+		
+		for(int i = 1; i < f.size(); i++) {
+			
+			if(max < f.get(i)) {
+				max = f.get(i);
+				index = i;
+			}
+			
+			
+		}
+		
+		
+		//System.out.println("here  " +  index);
+		return index;
+		
 	}
+	
 
 	public static void initializeFaces(String name, ArrayList<Integer[][]> image) throws FileNotFoundException {
 

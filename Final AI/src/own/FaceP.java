@@ -1,4 +1,4 @@
-package perceptron;
+package own;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,33 +6,34 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Digits{
+public class FaceP {
 	
 	static ArrayList<Integer[][]> images = new ArrayList<Integer[][]>();
 	static ArrayList<Integer[][]> tempImages = new ArrayList<Integer[][]>();
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
-	static int rows = 28; 
-	static int columns = 28;
-	static int splitRows = 14;
-	static int splitColumns = 14;
-	static ArrayList<ArrayList<Double>> weights = new ArrayList<ArrayList<Double>> ();
+	static int rows = 70; 
+	static int columns = 60;
+	static int splitRows = 35;
+	static int splitColumns = 30;
+	static ArrayList<Integer> weights = new ArrayList<Integer>();
 	static ArrayList<ArrayList<Integer>> feature =  new ArrayList<ArrayList<Integer>>();//number of pixels
-	static ArrayList<ArrayList<Double>> oldWeights = new ArrayList<ArrayList<Double>>();
-	static ArrayList<Double> fy = new ArrayList<Double>();
-	static ArrayList<Double> fy2 = new ArrayList<Double>();
+	static ArrayList<Integer> oldWeights = new ArrayList<Integer>();
 	
 	
 	static ArrayList<Integer[][]> images2 = new ArrayList<Integer[][]>();
 	static ArrayList<ArrayList<Integer>> feature2 =  new ArrayList<ArrayList<Integer>>();//number of pixels
 	
 	
-public static void main(String[] args) throws FileNotFoundException{
+public void perceptronF() throws FileNotFoundException{
 		
 		
-	ArrayList<Integer> no = new ArrayList<Integer>();
+
+	System.out.println(getCorrect(442,"facedatatrainlabels"));
+		for(int ww = 0; ww < 49; ww++) {
+
 	
-	
-		/*for(int ww = 0; ww < 100; ww++) {
+//		for(int ww = 0; ww < 100; ww++) {
+
 			
 			images.clear();
 			images2.clear();
@@ -41,15 +42,10 @@ public static void main(String[] args) throws FileNotFoundException{
 			feature2.clear();
 			tempImages.clear();
 			indices.clear();
-			oldWeights.clear();*/
-	
-	
-		
-		
+			oldWeights.clear();
 			
-		initializeFaces("trainingimages", images);
-		initializeFaces("testimages", images2);
-		//printDigits(images);
+		initializeFaces("facedatatrain", images);
+		initializeFaces("facedatatest", images2);
 		
 		for(int i = 0; i < images.size(); i++) {
 			numberOfPixels(i, feature, images);
@@ -60,12 +56,13 @@ public static void main(String[] args) throws FileNotFoundException{
 		}
 		//System.out.println(images2.size());
 		
-		//System.out.println(images.size());
 		
+		;
 		int x = 1;
 	
 		
 		while(x <= 10) {
+			
 			
 			
 			indices.clear();
@@ -73,10 +70,8 @@ public static void main(String[] args) throws FileNotFoundException{
 			weights.clear();
 			//System.out.println(images.size());
 			//System.out.println("here " + (int)( (double) images.size() *  ((double)x/10)));
-			//System.out.println((double)x * 10  + "%");
-			//System.out.println("image size: " + images.size() *  ((double)x/10));
-		for(int i = 0; i < (int)((double) images.size() *  ((double)x/10)); i++){//same image again or not?
 			
+		for(int i = 0; i < (int)((double) images.size() *  ((double)x/10)); i++){//same image again or not?
 			Random r = new Random();
 			int index = (int) r.nextInt(images.size());
 			while(indices.contains(index) == true) {
@@ -96,40 +91,41 @@ public static void main(String[] args) throws FileNotFoundException{
 		long starttime = System.nanoTime();
 		for(int index = 0; index < images2.size(); index++) {
 			
-			double sum = 0;
+			int sum = 0;
 			int answer;
-			fy2.clear();
-		for(int i = 0; i < weights.size(); i++) {
 			
-			for(int j = 0; j < weights.get(i).size() - 1; j++){
-				sum += (weights.get(i).get(j) * feature2.get(index).get(j));
+			
+			for(int i = 0; i < weights.size() - 1; i++) {
+				sum += (weights.get(i) * feature2.get(index).get(i));
 			}
 				
-			sum += weights.get(i).get(weights.get(i).size() - 1);
-			fy2.add(sum);
-		
+			sum += weights.get(weights.size() - 1);
 			
-		}
-		
-		 sum = getMax(fy2);
-		 answer = fy2.indexOf(sum);
-		// System.out.println("sup");
-		// System.out.println("answer " + answer);
-		 //System.out.println();
-		 
-		/* if(index >= r && index < r+20 && x == 10) {
-				printSingleDigit(images2.get(index));
+			if(sum >= 0){
+				answer = 1;
+			}else{
+				answer = 0;
+			}
+			
+			
+			
+			if(index >= r && index < r+20 && x == 10) {
+				printSingleFace(images2.get(index));
 				System.out.println();
 				System.out.println();
 				System.out.println();
-				System.out.println(answer);
+				if(answer == 1) {
+					System.out.println("FACE");
+				}
+				else {
+					System.out.println("NOT FACE");
+				}
 				System.out.println();
 				System.out.println();
 				System.out.println();
 			}
-			*/
 			
-			if(answer == getCorrect(index, "testlabels")) {
+			if(answer == getCorrect(index, "facedatatestlabels")) {
 				correct++;
 			}
 			
@@ -138,29 +134,24 @@ public static void main(String[] args) throws FileNotFoundException{
 		double answer = (double)correct / images2.size();
 		answer = answer * 100;
 		
-		
+		//if(x == 10)
 		
 		
 		long endtime = System.nanoTime();
 		
-		//System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
-		
+		System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
 		
 		System.out.println(answer + "%" );
-		
 		System.out.println();
-
 		//System.out.println(correct);
-
 		
 			
-	
 			
 			x++;
 			
 			
-			
-			
+		
+		}
 		}
 		
 		
@@ -169,15 +160,15 @@ public static void main(String[] args) throws FileNotFoundException{
 			//printFaces();
 			
 			
-	//System.out.println();
+			//System.out.println();
+			
+			
+//		}
+			
+			
+			
 		
-			
-		//}
-			
-			
 	}
-		
-	
 
 
 public static void runPerceptron() throws FileNotFoundException {
@@ -187,67 +178,51 @@ public static void runPerceptron() throws FileNotFoundException {
 	initializeWeights();
 	
 	while(true) {
-			
 			oldWeights.clear();
-	for(int i = 0; i < weights.size(); i++) {
+		for(int i = 0; i < weights.size(); i++) {
 			
 			oldWeights.add(weights.get(i));
-	
 		}
-		
-	
 		//System.out.println("Here");
 		
 		for(int a = 0; a < tempImages.size(); a++) {
 			//System.out.println(tempImages.size());
-			fy.clear();
 			int index = indices.get(a);
-			double sum = 0;
+			int sum = 0;
 			int answer;
-		
-			for(int i = 0; i < weights.size(); i++) {
-				for(int j = 0; j < weights.get(i).size() - 1; j++){
-				sum += (weights.get(i).get(j) * feature.get(index).get(j));
+			
+			for(int i = 0; i < weights.size() - 1; i++) {
+				sum += (weights.get(i) * feature.get(index).get(i));
 			}
 			
-			sum += weights.get(i).get(weights.get(i).size() - 1);
-			fy.add(sum);
+			sum += weights.get(weights.size() - 1);
+			
+			if(sum >= 0){
+				answer = 1;
+			}else{
+				answer = 0;
 			}
 			
-			
-			 sum = getMax(fy);
-			 answer = fy.indexOf(sum);
-
-			 
-			
-			
-
-/*			 
-			 if(answer == 0) {
-				 System.out.println("sup");
-			 }
-*/			
-
-			int correct = getCorrect(index, "traininglabels");
+			int correct = getCorrect(index, "facedatatrainlabels");
 			
 			if(answer != correct) {
-				
-				//System.out.println("answer " + answer);	
-		for(int i = 0; i < weights.get(answer).size() - 1; i++) {
-		weights.get(answer).set(i, weights.get(answer).get(i) - feature.get(index).get(i));
+				if(sum >= 0) {
+					
+					for(int i = 0; i < weights.size() - 1; i++) {
+						weights.set(i, weights.get(i) - feature.get(index).get(i));
 					}
-	weights.get(answer).set(weights.get(answer).size() - 1, weights.get(answer).get(weights.get(answer).size() - 1) - 1);
+				weights.set(weights.size() - 1, weights.get(weights.size() - 1) - 1);
 					
-				
+				}else{
 					
-		for(int i = 0; i < weights.get(correct).size() - 1; i++) {
-		weights.get(correct).set(i, weights.get(correct).get(i) + feature.get(index).get(i));
-		}
-	weights.get(correct).set(weights.get(correct).size() - 1, weights.get(correct).get(weights.get(correct).size() - 1) + 1);
+					for(int i = 0; i < weights.size() - 1; i++) {
+						weights.set(i, weights.get(i) + feature.get(index).get(i));
+					}
+				weights.set(weights.size() - 1, weights.get(weights.size() - 1) + 1);
 					
 				}
 				
-			
+			}
 			
 			
 		}
@@ -266,10 +241,10 @@ public static void runPerceptron() throws FileNotFoundException {
 				System.out.println();*/
 		//System.out.println("here");
 		if(terminate() == 1) {
-
+			
 			long endtime = System.nanoTime();
 			
-			//System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
+			System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
 			
 			break;
 		}
@@ -302,10 +277,7 @@ public static void initializeFaces(String name, ArrayList<Integer[][]> image) th
 			}else{
 				temp2[i] = 1;
 			}
-			
-			
 		}
-
 		
 		temp1[counter] = temp2;
 		counter++;
@@ -332,18 +304,14 @@ public static int terminate() {
 	int sumNew = 0;
 	
 	for(int i = 0; i < weights.size(); i++) {
-		for(int j = 0; j < weights.get(i).size() - 1; j++){
-		sumNew += weights.get(i).get(j);
-		}
+		sumNew += weights.get(i);
 	}
 	
-	for(int i = 0; i < weights.size(); i++) {
-		for(int j = 0; j < weights.get(i).size() - 1; j++){
-		sumOld += oldWeights.get(i).get(j);
-		}
+	for(int i = 0; i < oldWeights.size(); i++) {
+		sumOld += oldWeights.get(i);
 	}
 	
-	if(Math.abs(sumNew - sumOld) == 0) {
+	if(Math.abs(sumNew - sumOld) < 1) {
 		return 1;
 	}
 	
@@ -357,7 +325,7 @@ public static int getCorrect(int index, String name) throws FileNotFoundExceptio
 	Scanner line = new Scanner(file);
 	int counter = 0;
 	
-	while(line.hasNextLine()) {
+	while(line.hasNext()) {
 		int correct = line.nextInt();
 		
 		if(counter == index) {
@@ -372,50 +340,6 @@ public static int getCorrect(int index, String name) throws FileNotFoundExceptio
 	
 	line.close();
 	return -1;
-	
-}
-
-public static double getMax(ArrayList<Double> fy3) {
-	
-	Double max = fy3.get(0);
-	int index = 0;
-	
-	for(int i = 1; i < fy3.size(); i++) {
-		
-		if(max < fy3.get(i)) {
-			max = fy3.get(i);
-			index = i;
-		}
-		
-		
-	}
-	
-	
-	//System.out.println("here  " +  index);
-	return max;
-	
-	
-}
-
-public static int getIndex(ArrayList<Integer> f) {
-	
-	int max = f.get(0);
-	int index = 0;
-	
-	for(int i = 1; i < f.size(); i++) {
-		
-		if(max < f.get(i)) {
-			max = f.get(i);
-			index = i;
-		}
-		
-		
-	}
-	
-	
-	//System.out.println("here  " +  index);
-	return index;
-	
 	
 }
 
@@ -439,33 +363,15 @@ public static void initializeWeights() {// setting weights randomly from - to + 
 	//divided into
 
 Random ran = new Random();
+int r = ran.nextInt(10);
 
 
-
-double r = ran.nextDouble() * 1.0;
-
-ArrayList<Double> temp = new ArrayList<Double>();
-
-for(int i = 0; i < 10; i++){
-	
-	for(int j = 0; j < splitRows * splitColumns; j++) {
-		//weights.get(i).add(r);
-		r = ran.nextDouble() * 1.0 ;
-		temp.add(r);
-
-		r = ran.nextDouble() * 1.0 ;
+for(int i = 0; i < splitRows * splitColumns; i++) {
+weights.add(r);
+r = ran.nextInt(10);
 }
 
-//weights.get(i).add(r);//adds bias
-	r = ran.nextDouble() * 1.0;
-	temp.add(r);
-	//System.out.println(temp.size());
-	weights.add(temp);
-	//System.out.println("we size " + weights.get(i).size());
-	temp = new ArrayList<Double>();
-	//System.out.println("   2we size " + weights.get(i).size());
-	
-}
+weights.add(r);//adds bias
 
 
 }
@@ -498,7 +404,7 @@ public static void numberOfPixels(int index, ArrayList<ArrayList<Integer>> featu
 }
 
 
-public static void printDigits(ArrayList<Integer[][]> image) {//Prints all faces
+public static void printFaces(ArrayList<Integer[][]> image) {//Prints all faces
 	for(int index = 0; index < image.size(); index++) {
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < columns; j++) {
@@ -509,7 +415,7 @@ public static void printDigits(ArrayList<Integer[][]> image) {//Prints all faces
 }
 }
 
-public static void printSingleDigit(Integer[][] image) {
+public static void printSingleFace(Integer[][] image) {
 	
 	for(int i = 0; i < rows; i++) {
 		for(int j = 0; j < columns; j++) {
@@ -525,6 +431,7 @@ public static void printSingleDigit(Integer[][] image) {
 	}
 	
 }
+
 
 public static void printFeatures(int index) {
 	//numberOfPixels(index);
