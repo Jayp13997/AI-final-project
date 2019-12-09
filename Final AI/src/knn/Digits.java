@@ -72,7 +72,7 @@ public static void main(String[] args) throws FileNotFoundException{
 			}	
 			//System.out.println(tempImages.size());
 			//runPerceptron(); 
-			System.out.println("RUNNING: " + (x * 10) + "%");
+//			System.out.println("RUNNING: " + (x * 10) + "%");
 			differences();
 			x++;
 			k = 7;
@@ -84,8 +84,11 @@ public static void main(String[] args) throws FileNotFoundException{
 
 public static void differences() {
 	
+	long starttime = System.nanoTime();
 	int correct = 0;
 	int tempInd = 0;
+	Random ran = new Random();
+	int r = ran.nextInt(100);
 	for(int index = 0; index < images2.size(); index++) {
 		
 		for(int trainI = 0; trainI < tempImages.size(); trainI++) {
@@ -107,6 +110,20 @@ public static void differences() {
 				n = answer();
 			}
 			
+			
+			if(index >= r && index < r+20 && tempImages.size() == images.size()) {
+				printSingleDigit(images2.get(index));
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println(n);
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+			
+			
+			
 			if(n == testLabels.get(index)) {
 				
 				correct++;
@@ -114,12 +131,16 @@ public static void differences() {
 		distance.clear();
 		k = 7;
 	}
-			
+	
+	long endtime = System.nanoTime();
+	
+	System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
+	
 	double answer = (double)correct / images2.size();
 	answer = answer * 100;
 	
-	System.out.println(correct);
-	System.out.println("size " + images2.size());
+//	System.out.println(correct);
+//	System.out.println("size " + images2.size());
 	
 	System.out.println(answer + "%" );
 			

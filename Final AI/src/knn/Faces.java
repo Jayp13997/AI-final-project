@@ -70,11 +70,19 @@ public static void main(String[] args) throws FileNotFoundException{
 			}	
 			//System.out.println(tempImages.size());
 			//runPerceptron(); 
-			System.out.println("RUNNING: " + (x * 10) + "%");
+//			System.out.println("RUNNING: " + (x * 10) + "%");
+			
+//			long starttime = System.nanoTime();
+			
 			differences();
+			
+//			long endtime = System.nanoTime();
+			
+//			System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
+			
 			x++;
 			k = 10;
-			System.out.println();
+//			System.out.println();
 			}
 			
 		
@@ -82,8 +90,11 @@ public static void main(String[] args) throws FileNotFoundException{
 
 public static void differences() {
 	
+	long starttime = System.nanoTime();
 	int correct = 0;
 	int tempInd = 0;
+	Random ran = new Random();
+	int r = ran.nextInt(100);
 	for(int index = 0; index < images2.size(); index++) {
 		
 		for(int trainI = 0; trainI < tempImages.size(); trainI++) {
@@ -105,19 +116,42 @@ public static void differences() {
 				n = answer();
 			}
 			
+			
+			if(index >= r && index < r+20 && tempImages.size() == images.size()) {
+				printSingleFace(images2.get(index));
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				if(n == 1) {
+					System.out.println("FACE");
+				}
+				else {
+					System.out.println("NOT FACE");
+				}
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+			
+			
 			if(n == testLabels.get(index)) {
 				
 				correct++;
 			}
 		distance.clear();
 		k = 10;
+		
 	}
 			
+	long endtime = System.nanoTime();
+	
+	System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
+	
 	double answer = (double)correct / images2.size();
 	answer = answer * 100;
 	
-	System.out.println(correct);
-	System.out.println("size " + images2.size());
+//	System.out.println(correct);
+//	System.out.println("size " + images2.size());
 	
 	System.out.println(answer + "%" );
 			
@@ -359,6 +393,23 @@ public static boolean inArray(ArrayList<Integer> a, int j) {
 	return false;
 }
 
+
+public static void printSingleFace(Integer[][] image) {
+	
+	for(int i = 0; i < rows; i++) {
+		for(int j = 0; j < columns; j++) {
+			if(image[i][j] == 0){
+				System.out.print(' ');
+			}
+			else {
+				System.out.print('+');
+			}
+//			System.out.print(image[i][j]);
+		}
+		System.out.println();
+	}
+	
+}
 
 public static void fillLabels(String name, ArrayList<Integer> lables) throws FileNotFoundException {
 	

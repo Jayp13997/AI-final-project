@@ -117,7 +117,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		// System.out.println("answer " + answer);
 		 //System.out.println();
 		 
-		/* if(index >= r && index < r+20 && x == 10) {
+		 if(index >= r && index < r+20 && x == 10) {
 				printSingleDigit(images2.get(index));
 				System.out.println();
 				System.out.println();
@@ -127,7 +127,7 @@ public static void main(String[] args) throws FileNotFoundException{
 				System.out.println();
 				System.out.println();
 			}
-			*/
+			
 			
 			if(answer == getCorrect(index, "testlabels")) {
 				correct++;
@@ -143,7 +143,7 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		long endtime = System.nanoTime();
 		
-		//System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
+		System.out.println("Testing time: " + ((double)(endtime - starttime)/1000000000) + "s");
 		
 		
 		System.out.println(answer + "%" );
@@ -269,7 +269,7 @@ public static void runPerceptron() throws FileNotFoundException {
 
 			long endtime = System.nanoTime();
 			
-			//System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
+			System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
 			
 			break;
 		}

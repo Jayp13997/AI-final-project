@@ -97,11 +97,20 @@ public class Digits{
 		
 		
 	}
+	
+	long starttime = System.nanoTime();
+	
 	for(int number = 0; number < 10; number++) {
 		buildTable(number);
 	}
 		
+	long endtime = System.nanoTime();
+	
+	System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
+	
 		int correct = 0;
+		Random ran = new Random();
+		int r = ran.nextInt(100);
 		for(int i = 0; i < feature2.size(); i++) {
 			
 			double multiF = 1;
@@ -134,6 +143,23 @@ public class Digits{
 			
 			answer = getIndex(correctNum); //return index of max digit prob 
 			//System.out.println(answer);
+			
+			
+			
+			if(i >= r && i < r+20 && x == 10) {
+				printSingleDigit(images2.get(i));
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println(answer);
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+			
+			
+			
+			
 			if(answer == testLabels.get(i)) {
 				correct++;
 			}
@@ -355,6 +381,24 @@ public class Digits{
 			}
 		}
 	}
+	
+	public static void printSingleDigit(Integer[][] image) {
+		
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < columns; j++) {
+				if(image[i][j] == 0){
+					System.out.print(' ');
+				}
+				else {
+					System.out.print('+');
+				}
+//				System.out.print(image[i][j]);
+			}
+			System.out.println();
+		}
+		
+	}
+	
 
 	public static void printFeatures(int index) {
 		// numberOfPixels(index);

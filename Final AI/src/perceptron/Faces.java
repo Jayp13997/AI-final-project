@@ -28,8 +28,8 @@ public static void main(String[] args) throws FileNotFoundException{
 		
 		
 
-	System.out.println(getCorrect(442,"facedatatrainlabels"));
-		for(int ww = 0; ww < 49; ww++) {
+//	System.out.println(getCorrect(442,"facedatatrainlabels"));
+//		for(int ww = 0; ww < 49; ww++) {
 
 	
 //		for(int ww = 0; ww < 100; ww++) {
@@ -151,8 +151,8 @@ public static void main(String[] args) throws FileNotFoundException{
 			
 			
 		
-		}
-		}
+	}
+}
 		
 		
 		
@@ -167,8 +167,6 @@ public static void main(String[] args) throws FileNotFoundException{
 			
 			
 			
-		
-	}
 
 
 public static void runPerceptron() throws FileNotFoundException {

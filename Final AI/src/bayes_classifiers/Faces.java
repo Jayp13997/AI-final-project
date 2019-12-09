@@ -71,6 +71,9 @@ public class Faces {
 	
 	double counter = 0;
 	
+	Random ran = new Random();
+	int r = ran.nextInt(100);
+	
 	for(int i = 0; i < indices.size(); i++) {
 		int v = indices.get(i);
 		if(trainLabels.get(v) == 1){
@@ -80,10 +83,12 @@ public class Faces {
 	pyFace = counter/ tempImages.size();
 	pyNotFace = 1 - pyFace;
 	
-	
+		long starttime = System.nanoTime();
 		buildTable(0);
 		buildTable(1);
-	
+		long endtime = System.nanoTime();
+		
+		System.out.println("Training time: " + ((double)(endtime - starttime)/1000000000) + "s");
 		
 		int correct = 0;
 		for(int i = 0; i < feature2.size(); i++) {
@@ -114,6 +119,25 @@ public class Faces {
 			}else {
 				answer = 0;
 			}
+			
+			
+			if(i >= r && i < r+20 && x == 10) {
+				printSingleFace(images2.get(i));
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				if(answer == 1) {
+					System.out.println("FACE");
+				}
+				else {
+					System.out.println("NOT FACE");
+				}
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+			
+			
 			
 			if(answer == testLabels.get(i)) {
 				correct++;
@@ -368,6 +392,23 @@ public class Faces {
 				System.out.println();
 			}
 		}
+	}
+	
+	public static void printSingleFace(Integer[][] image) {
+		
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < columns; j++) {
+				if(image[i][j] == 0){
+					System.out.print(' ');
+				}
+				else {
+					System.out.print('+');
+				}
+//				System.out.print(image[i][j]);
+			}
+			System.out.println();
+		}
+		
 	}
 
 	public static void printFeatures(int index) {
